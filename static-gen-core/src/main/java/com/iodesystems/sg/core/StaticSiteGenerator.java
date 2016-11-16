@@ -1,4 +1,4 @@
-package com.iodesystems.ssg.core;
+package com.iodesystems.sg.core;
 
 import com.google.gson.Gson;
 import com.mitchellbosecke.pebble.PebbleEngine;

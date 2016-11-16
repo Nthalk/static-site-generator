@@ -1,4 +1,4 @@
-package com.iodesystems.ssg.core;
+package com.iodesystems.sg.core;
 
 public class SiteConfigurationException extends Throwable {
     public SiteConfigurationException(String message) {

@@ -1,4 +1,4 @@
-package com.iodesystems.ssg.core;
+package com.iodesystems.sg.core;
 
 import java.util.List;
 import java.util.Map;

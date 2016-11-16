@@ -2,7 +2,6 @@ assets:
   - js
   - css/main.css
 context:
-  name: Steeeeeeve!
 routes:
   /:
     view: home.html

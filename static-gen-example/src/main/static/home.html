@@ -4,13 +4,14 @@
 
 {% block content %}
 
-<h1> Home </h1>
+<h1> Hom2e </h1>
 <p> Welcome to my home page. My name is {{ name }}.</p>
 
 {% for article in articles %}
-<div>
+<span>
     {{article.slug}}
-</div>
+</span>
+
 {% endfor %}
 
 {% endblock %}
