@@ -1,0 +1,17 @@
+assets:
+  - js
+  - css/main.css
+context:
+  name: Steeeeeeve!
+routes:
+  /:
+    view: home.html
+    context:
+    importContexts:
+      articles: data/articles.yml
+  /articles/{{slug}}.html:
+    view: article.html
+    context:
+    expandContexts: data/articles.yml
+
+
