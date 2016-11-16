@@ -4,12 +4,15 @@
 
 {% block content %}
 
-<h1> Hom2e </h1>
-<p> Welcome to my home page. My name is {{ name }}.</p>
+<h1> Home:
+    <small>{{ valueForHome }}</small>
+</h1>
+<p> Welcome to my home page</p>
 
 {% for article in articles %}
 <span>
-    {{article.slug}}
+    <a href="/articles/{{article.file}}.html">{{article.title}}</a>
+
 </span>
 
 {% endfor %}

@@ -1,7 +1,7 @@
 package com.iodesystems.sg;
 
-import com.iodesystems.sg.core.SiteConfigurationException;
-import com.iodesystems.sg.core.StaticSiteGenerator;
+import com.iodesystems.sg.core.ConfigurationException;
+import com.iodesystems.sg.core.StaticFilesGenerator;
 import com.mitchellbosecke.pebble.error.PebbleException;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
@@ -119,12 +119,12 @@ public class GenerateMojo extends AbstractMojo {
     }
 
     private void generate() {
-        StaticSiteGenerator staticSiteGenerator = new StaticSiteGenerator(new File(sourcePath), new File(outPath));
+        StaticFilesGenerator staticFilesGenerator = new StaticFilesGenerator(new File(sourcePath), new File(outPath));
         try {
-            staticSiteGenerator.generate();
+            staticFilesGenerator.generate();
         } catch (PebbleException | IOException e) {
             e.printStackTrace();
-        } catch (SiteConfigurationException e) {
+        } catch (ConfigurationException e) {
             e.printStackTrace();
         }
     }

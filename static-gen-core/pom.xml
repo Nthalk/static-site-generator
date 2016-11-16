@@ -26,9 +26,9 @@
             <version>2.7</version>
         </dependency>
         <dependency>
-            <groupId>org.pegdown</groupId>
-            <artifactId>pegdown</artifactId>
-            <version>1.2.1</version>
+            <groupId>com.atlassian.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.7.1</version>
         </dependency>
         <dependency>
             <groupId>com.mitchellbosecke</groupId>
