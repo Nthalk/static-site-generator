@@ -1,11 +1,6 @@
 package com.iodesystems.sg;
 
-import com.iodesystems.sg.core.ConfigurationException;
-import com.iodesystems.sg.core.StaticFilesGenerator;
-import com.mitchellbosecke.pebble.error.PebbleException;
-import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
-import org.apache.commons.io.monitor.FileAlterationMonitor;
-import org.apache.commons.io.monitor.FileAlterationObserver;
+import com.iodesystems.sg.core.*;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -13,7 +8,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
-import java.io.IOException;
 
 @Mojo(name = "generate")
 public class GenerateMojo extends AbstractMojo {
@@ -27,6 +21,11 @@ public class GenerateMojo extends AbstractMojo {
         defaultValue = "${project.build.outputDirectory}/",
         property = "sg.out")
     protected String outPath;
+
+    @Parameter(
+        defaultValue = "files.yml",
+        property = "sg.manifest")
+    protected String manifest;
 
     @Parameter(
         defaultValue = "false",
@@ -45,31 +44,42 @@ public class GenerateMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        generate();
+        StaticFilesGenerator staticFilesGenerator = new StaticFilesGenerator(
+            new File(sourcePath),
+            new File(outPath),
+            manifest);
+
+        generate(staticFilesGenerator);
 
         if (serve) {
-            serve();
+            getLog().info("Serving files from " + outPath);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    new StaticFilesServer(outPath, servePort).start();
+                }
+            }).start();
+        }
+        if (watch) {
+            getLog().info("Watching files from " + outPath);
+            new StaticFilesWatcher(sourcePath, staticFilesGenerator, new Log() {
+                @Override
+                public void info(String message) {
+                    getLog().info(message);
+                }
+
+                @Override
+                public void error(String message, Throwable cause) {
+                    getLog().error(message, cause);
+                }
+            }).start();
         }
 
-        if (watch) {
-            watch();
-        }
         if (watch || serve) {
             delay();
         }
     }
 
-    private void serve() {
-        getLog().info("Serving files from " + outPath);
-        spark.Spark.externalStaticFileLocation(outPath);
-        spark.Spark.port(servePort);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                spark.Spark.init();
-            }
-        }).start();
-    }
 
     private void delay() {
         while (true) {
@@ -80,52 +90,11 @@ public class GenerateMojo extends AbstractMojo {
         }
     }
 
-    private void watch() {
-        FileAlterationObserver observer = new FileAlterationObserver(new File(sourcePath));
-        observer.addListener(new FileAlterationListenerAdaptor() {
-            @Override
-            public void onFileCreate(File file) {
-                getLog().info("File created: " + file.getPath());
-                generate();
-            }
-
-            @Override
-            public void onFileChange(File file) {
-                getLog().info("File changed: " + file.getPath());
-                generate();
-            }
-
-            @Override
-            public void onFileDelete(File file) {
-                getLog().info("File deleted: " + file.getPath());
-                generate();
-            }
-        });
-
-        FileAlterationMonitor monitor = new FileAlterationMonitor(1000, observer);
-        try {
-            monitor.start();
-            getLog().info("Watching for changes: " + sourcePath);
-        } catch (InterruptedException e) {
-            getLog().info("Stopped watching for changes");
-            try {
-                monitor.stop();
-            } catch (Exception e1) {
-                getLog().error("Stopped watching for changes", e);
-            }
-        } catch (Exception e) {
-            getLog().error("Stopped watching for changes", e);
-        }
-    }
-
-    private void generate() {
-        StaticFilesGenerator staticFilesGenerator = new StaticFilesGenerator(new File(sourcePath), new File(outPath));
+    private void generate(StaticFilesGenerator staticFilesGenerator) {
         try {
             staticFilesGenerator.generate();
-        } catch (PebbleException | IOException e) {
-            e.printStackTrace();
         } catch (ConfigurationException e) {
-            e.printStackTrace();
+            getLog().error("Could not generate files", e);
         }
     }
 }

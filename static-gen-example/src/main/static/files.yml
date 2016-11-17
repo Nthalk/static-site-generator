@@ -1,0 +1,14 @@
+copy:
+  - vendor
+  - js
+  - css
+files:
+  /:
+    view: home.html
+    model:
+      title: Static Gen
+  /articles/{{file}}.html:
+    view: article.html
+    fileModels: "data/articles"
+
+

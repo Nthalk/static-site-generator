@@ -1,15 +1,22 @@
 <html>
 <head>
     <title>{% block title %}My Website{% endblock %}</title>
+    <link href="/vendor/normalize.css" rel="stylesheet"/>
+    <link href="/css/site.css" rel="stylesheet"/>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet"/>
+
+    <!-- Icons -->
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <!-- Highlighter -->
+    <link href="/vendor/highlight-custom/styles/solarized-dark.css" rel="stylesheet"/>
+    <script src="/vendor/highlight-custom/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
 </head>
 <body>
-<div id="content">
-    {% block content %}{% endblock %}
-</div>
-<b>
-    {% block footer %}
-    Copyright 2014
-    {% endblock %}
-</b>
+{% block content %}{% endblock %}
 </body>
 </html>

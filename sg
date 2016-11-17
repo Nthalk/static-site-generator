@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [ ! -e static-gen-core/target/sg.jar ]; then
+  mvn clean install
+fi
+
+java -jar static-gen-core/target/sg.jar $@ 
+

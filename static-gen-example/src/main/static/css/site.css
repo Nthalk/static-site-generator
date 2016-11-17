@@ -1,0 +1,40 @@
+/* Header */
+
+.header {
+    margin: 50px;
+}
+
+.header .lead {
+    font-size: 66px;
+    color: #5b8ec0;
+    font-family: 'Arvo', serif;
+    margin-bottom: 0;
+}
+
+.header .subLead {
+    color: #1f3041;
+    margin-left: 10px;
+}
+
+.header .links {
+    margin-top: 15px;
+}
+
+.header .links a {
+    border-radius: 25px;
+    background: #5b8ec0;
+    padding: 10px;
+    margin: 5px;
+    line-height: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+.header .links a:hover {
+    background: #385877;
+}
+
+/* Container */
+.container {
+    margin: 50px;
+}

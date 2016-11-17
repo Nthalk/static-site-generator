@@ -1,20 +1,42 @@
 {% extends "tpl/base.html" %}
-
-{% block title %} Home {% endblock %}
-
+{% block title %}{{title}}{% endblock %}
 {% block content %}
+<div class="header">
+    <h1 class="lead">Static Gen</h1>
+    <div class="subLead">The simple, generic, JVM templating system</div>
+    <div class="links">
+        <a href="">
+            <i class="fa fa-magic"></i>
+            Usage
+        </a>
+        <a href="">
+            <i class="fa fa-code"></i>
+            Maven
+        </a>
+        <a href="">
+            <i class="fa fa-book"></i>
+            Documentation
+        </a>
+        <a href="http://github.com/Nthalk/static-site-generator">
+            <i class="fa fa-github"></i>
+            Github
+        </a>
+    </div>
+</div>
+<pre><code class="yaml">$ cat files.yaml
+copy:
+    - js
+    - css
+files:
+    /:
+        view: home.html
+        model:
+    /articles/{{'{{file}}'}}.html:
+        view: article.html
+        fileModels: "data/articles"
+</code></pre>
 
-<h1> Home:
-    <small>{{ valueForHome }}</small>
-</h1>
-<p> Welcome to my home page</p>
-
-{% for article in articles %}
-<span>
-    <a href="/articles/{{article.file}}.html">{{article.title}}</a>
-
-</span>
-
-{% endfor %}
-
+<div class="container">
+    <h2>Features</h2>
+</div>
 {% endblock %}

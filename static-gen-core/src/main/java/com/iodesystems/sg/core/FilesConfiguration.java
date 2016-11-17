@@ -5,15 +5,15 @@ import java.util.Map;
 
 public class FilesConfiguration extends ModelConfiguration {
 
-    private List<String> assets;
+    private List<String> copy;
     private Map<String, FileConfiguration> files;
 
-    public List<String> getAssets() {
-        return assets;
+    public List<String> getCopy() {
+        return copy;
     }
 
-    public void setAssets(List<String> assets) {
-        this.assets = assets;
+    public void setCopy(List<String> copy) {
+        this.copy = copy;
     }
 
     public Map<String, FileConfiguration> getFiles() {
