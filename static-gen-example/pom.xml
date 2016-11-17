@@ -26,10 +26,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <!--<sourcePath>${project.basedir}</sourcePath>-->
-                    <!--<outPath>${project.build.outputDirectory}</outPath>-->
-                </configuration>
             </plugin>
         </plugins>
     </build>

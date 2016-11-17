@@ -30,8 +30,16 @@
     text-decoration: none;
 }
 
+.header .example {
+    float: right;
+}
+
 .header .links a:hover {
     background: #385877;
+}
+
+.codeBar code {
+    padding: 20px;
 }
 
 /* Container */

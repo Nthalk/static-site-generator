@@ -23,20 +23,30 @@
         </a>
     </div>
 </div>
-<pre><code class="yaml">$ cat files.yaml
-copy:
-    - js
+<pre class="codeBar"><code class="yaml">$ cat files.yaml
+copy:                               # <-- Copy these files
+    - js                            # <-- Files or directories
     - css
-files:
-    /:
-        view: home.html
-        model:
-    /articles/{{'{{file}}'}}.html:
+files:                              # <-- Generate these files
+    /:                              # <-- Files that end in / are mapped to index.html
+        view: home.html             # <-- The pebble template to render
+        model:                      # <-- Add variables to the rendering
+            title: Static Gen       # <-- This will be available as {{'{{ title }}'}}
+
+    /articles/{{'{{file}}'}}.html:  # <-- File names can be templatized
         view: article.html
-        fileModels: "data/articles"
+        fileModels: "data/articles" # <-- The file will be generated for all items within this file
 </code></pre>
 
 <div class="container">
     <h2>Features</h2>
+    <ul>
+        <li>CLI application</li>
+        <li>Maven plugin</li>
+        <li>Reading models from markdown files</li>
+        <li>Extracting YAML model data within markdown file headers</li>
+        <li>Reading models from JSON files</li>
+        <li>Reading models from YAML files</li>
+    </ul>
 </div>
 {% endblock %}
