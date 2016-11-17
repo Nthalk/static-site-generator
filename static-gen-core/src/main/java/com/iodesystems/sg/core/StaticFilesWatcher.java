@@ -40,25 +40,20 @@ public class StaticFilesWatcher {
         });
 
         FileAlterationMonitor monitor = new FileAlterationMonitor(1000, observer);
+
         try {
             log.info("Started watching: " + sourcePath);
             monitor.start();
-        } catch (InterruptedException e) {
-            try {
-                log.info("Stopped watching: " + sourcePath);
-                monitor.stop();
-            } catch (Exception e1) {
-            }
         } catch (Exception e) {
+            log.error("Error watching: " + sourcePath, e);
         }
     }
 
     private void generate(StaticFilesGenerator staticFilesGenerator) {
         try {
-            log.info("Generating: " + sourcePath);
             staticFilesGenerator.generate();
         } catch (ConfigurationException e) {
-
+            log.error("Error generating: " + sourcePath, e);
         }
     }
 }
