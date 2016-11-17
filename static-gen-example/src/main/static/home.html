@@ -6,7 +6,7 @@
     <div class="subLead">The simple, generic, JVM templating system</div>
     <div class="links">
         <a href="">
-            <i class="fa fa-magic"></i>
+            <i class="fa fa-terminal"></i>
             Usage
         </a>
         <a href="">
@@ -24,12 +24,15 @@
     </div>
 </div>
 <pre class="codeBar"><code class="yaml">$ cat files.yaml
-copy:                               # <-- Copy these files
-    - js                            # <-- Files or directories
-    - css
+copy:                               # <-- Copy these
+    - css/style.css                 #     files
+    - js                            # <-- or directories
+    - vendor
+model:
+    license: MIT
 files:                              # <-- Generate these files
     /:                              # <-- Files that end in / are mapped to index.html
-        view: home.html             # <-- The pebble template to render
+        view: home.html             # <-- The pebble template file to render
         model:                      # <-- Add variables to the rendering
             title: Static Gen       # <-- This will be available as {{'{{ title }}'}}
 
@@ -48,5 +51,73 @@ files:                              # <-- Generate these files
         <li>Reading models from JSON files</li>
         <li>Reading models from YAML files</li>
     </ul>
+
+    <h2>Command Line</h2>
+    <p>Static Gen can be used from the command line after installing it.</p>
+    <pre><code>$ ./sg --help
+Static Gen.
+
+Usage:
+  sg [--manifest=FILE] [--source=DIR] [--out=DIR] [--watch] [--serve [--port=PORT]]
+  sg (-h | --help)
+  sg --version
+
+Options:
+  -h --help                  Show this screen.
+  --version                  Show version.
+  -m FILE --manifest=FILE    Manifest file [default: files.yml].
+  -o DIR --out=DIR           Output directory [default: dist].
+  -i DIR --source=DIR        Input directory [default: src].
+  -w --watch                 Watch for input changes [default: false].
+  -s --serve                 Serve the output directory [default: false].
+  -p PORT --port=PORT        Port to serve on [default: 3000].
+
+</code></pre>
+
+    <h2>Maven Plugin</h2>
+    <p>Static Gen also ships as a maven plugin, however, it does not require a maven project, and can be simpler to run via a maven command without needing to setup the CLI</p>
+    <pre><code>{{'<build>
+    ...
+    <plugins>
+        ...
+        <plugin>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>static-gen-maven-plugin</artifactId>
+            <version>${project.version}</version>
+            <executions>
+                <execution>
+                <phase>compile</phase>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <!-- -Dsg.watch=true -->
+                <!-- Default: false -->
+                <watch>true</watch>
+                <!-- -Dsg.serve=true -->
+                <!-- Default: false -->
+                <serve>true</serve>
+                <!-- -Dsg.servePort=3000-->
+                <!-- Default: 3000 -->
+                <port>3000</port>
+                <!-- -Dsg.src= -->
+                <!-- Default: ${project.basedir}/src/main/static-->
+                <src>${project.basedir}/src/main/static</src>
+                <!-- -Dsg.out=dist-->
+                <!-- Default: ${project.build.outputDirectory} -->
+                <out>${project.build.outputDirectory}</out>
+                <!-- -Dsg.manifest=files.yml -->
+                <!-- Default: files.yml -->
+                <manifest>files.yml</manifest>
+            </configuration>
+        </plugin>
+        ...
+    </plugins>
+    ...
+</build>
+' | escape }}</code></pre>
+
 </div>
 {% endblock %}

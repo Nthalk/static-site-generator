@@ -38,8 +38,8 @@
     background: #385877;
 }
 
-.codeBar code {
-    padding: 20px;
+code {
+    padding: 20px !important;
 }
 
 /* Container */

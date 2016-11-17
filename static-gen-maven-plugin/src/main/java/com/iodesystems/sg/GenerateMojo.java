@@ -18,7 +18,7 @@ public class GenerateMojo extends AbstractMojo {
     protected String sourcePath;
 
     @Parameter(
-        defaultValue = "${project.build.outputDirectory}/",
+        defaultValue = "${project.build.outputDirectory}",
         property = "sg.out")
     protected String outPath;
 
