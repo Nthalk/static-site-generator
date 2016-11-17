@@ -41,12 +41,14 @@ public class StaticFilesGenerator {
         fileLoader.setPrefix(inputDir.getAbsolutePath());
         pebbleEngineBuilder.loader(fileLoader);
         pageTemplateEngine = pebbleEngineBuilder.build();
-
         titleTemplateEngine = new PebbleEngine.Builder().loader(new StringLoader()).build();
     }
 
     public void generate() throws ConfigurationException {
         FilesConfiguration filesConfiguration = getFilesConfiguration();
+
+        titleTemplateEngine.getTemplateCache().invalidateAll();
+        pageTemplateEngine.getTemplateCache().invalidateAll();
 
         outputPath.mkdirs();
         try {
@@ -63,12 +65,12 @@ public class StaticFilesGenerator {
                 }
             }
 
-            Map<String, Object> model = getModel(filesConfiguration);
+            Map<String, Object> baseModel = getModel(filesConfiguration);
             // Build routes
             for (Map.Entry<String, FileConfiguration> entry : filesConfiguration.getFiles().entrySet()) {
                 FileConfiguration route = entry.getValue();
                 route.setPath(entry.getKey());
-                buildRoute(model, route);
+                buildRoute(baseModel, route);
             }
         } catch (IOException e) {
             throw new ConfigurationException("Error loading resources", e);
