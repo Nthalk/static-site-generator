@@ -53,24 +53,28 @@ public class StaticFilesGenerator {
         outputPath.mkdirs();
         try {
             // Copy assets
-            for (String asset : filesConfiguration.getCopy()) {
-                File assetFile = new File(inputDir, asset);
-                File outputAsset = new File(outputPath, asset);
-                if (assetFile.isDirectory()) {
-                    outputAsset.mkdirs();
-                    FileUtils.copyDirectory(assetFile, outputAsset);
-                } else {
-                    outputAsset.getParentFile().mkdirs();
-                    FileUtils.copyFile(assetFile, outputAsset);
+            if (filesConfiguration.getCopy() != null) {
+                for (String asset : filesConfiguration.getCopy()) {
+                    File assetFile = new File(inputDir, asset);
+                    File outputAsset = new File(outputPath, asset);
+                    if (assetFile.isDirectory()) {
+                        outputAsset.mkdirs();
+                        FileUtils.copyDirectory(assetFile, outputAsset);
+                    } else {
+                        outputAsset.getParentFile().mkdirs();
+                        FileUtils.copyFile(assetFile, outputAsset);
+                    }
                 }
             }
 
             Map<String, Object> baseModel = getModel(filesConfiguration);
             // Build routes
-            for (Map.Entry<String, FileConfiguration> entry : filesConfiguration.getFiles().entrySet()) {
-                FileConfiguration route = entry.getValue();
-                route.setPath(entry.getKey());
-                buildRoute(baseModel, route);
+            if (filesConfiguration.getFiles() != null) {
+                for (Map.Entry<String, FileConfiguration> entry : filesConfiguration.getFiles().entrySet()) {
+                    FileConfiguration route = entry.getValue();
+                    route.setPath(entry.getKey());
+                    buildRoute(baseModel, route);
+                }
             }
         } catch (IOException e) {
             throw new ConfigurationException("Error loading resources", e);
