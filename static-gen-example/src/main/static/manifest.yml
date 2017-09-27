@@ -1,0 +1,35 @@
+# Configure settings
+config:
+  emptyFileName: index.html
+
+# Set variables for everything
+model:
+  tagLine: The simple, generic, JVM templating system
+
+# Copy over resources with no filtering
+copy:
+  - vendor
+  - js
+  - css
+
+# Copy and filter resources with the root model
+filter:
+  - filtered-files
+
+# Generate files!
+generate:
+  /:
+    name: home
+    view: home.html
+    # Models can be dictionaries, lists of dictionaries, yml/json/md files, directories of yml/json/md files
+    model:
+      title: Static Gen
+
+  # This set of files has a templated name
+  /articles/{{file}}.html:
+    name: articles
+    view: article.html
+    model: data/articles
+
+
+

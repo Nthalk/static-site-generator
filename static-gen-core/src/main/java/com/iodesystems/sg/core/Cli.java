@@ -17,7 +17,7 @@ public class Cli {
             + "Options:\n"
             + "  -h --help                  Show this screen.\n"
             + "  --version                  Show version.\n"
-            + "  -m FILE --manifest=FILE    Manifest file [default: files.yml].\n"
+            + "  -m FILE --manifest=FILE    Manifest file [default: manifest.yml].\n"
             + "  -o DIR --out=DIR           Output directory [default: dist].\n"
             + "  -i DIR --source=DIR        Input directory [default: src].\n"
             + "  -w --watch                 Watch for input changes [default: false].\n"
@@ -39,12 +39,12 @@ public class Cli {
         Boolean serve = Boolean.valueOf(opts.get("--serve").toString());
         Boolean watch = Boolean.valueOf(opts.get("--watch").toString());
 
-        StaticFilesGenerator generator = new StaticFilesGenerator(new File(source), new File(out), manifest);
+        Generator generator = new Generator(new File(source), new File(out), manifest);
 
         try {
             generator.generate();
             if (watch) {
-                new StaticFilesWatcher(source, generator, new Log() {
+                new Watcher(source, generator, new Log() {
                     @Override
                     public void info(String message) {
                         System.out.println(message);
@@ -58,11 +58,12 @@ public class Cli {
             }
 
             if (serve) {
-                new StaticFilesServer(out, port).start();
+                new Server(out, port).start();
             }
 
         } catch (ConfigurationException e) {
             System.err.println("fatal: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

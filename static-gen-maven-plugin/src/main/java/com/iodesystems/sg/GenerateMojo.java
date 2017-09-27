@@ -23,7 +23,7 @@ public class GenerateMojo extends AbstractMojo {
     protected String outPath;
 
     @Parameter(
-        defaultValue = "files.yml",
+        defaultValue = "manifest.yml",
         property = "sg.manifest")
     protected String manifest;
 
@@ -44,25 +44,20 @@ public class GenerateMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        StaticFilesGenerator staticFilesGenerator = new StaticFilesGenerator(
+        Generator generator = new Generator(
             new File(sourcePath),
             new File(outPath),
             manifest);
 
-        generate(staticFilesGenerator);
+        generate(generator);
 
         if (serve) {
             getLog().info("Serving files from " + outPath);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    new StaticFilesServer(outPath, servePort).start();
-                }
-            }).start();
+            new Thread(() -> new Server(outPath, servePort).start()).start();
         }
         if (watch) {
             getLog().info("Watching files from " + outPath);
-            new StaticFilesWatcher(sourcePath, staticFilesGenerator, new Log() {
+            new Watcher(sourcePath, generator, new Log() {
                 @Override
                 public void info(String message) {
                     getLog().info(message);
@@ -90,9 +85,9 @@ public class GenerateMojo extends AbstractMojo {
         }
     }
 
-    private void generate(StaticFilesGenerator staticFilesGenerator) {
+    private void generate(Generator generator) {
         try {
-            staticFilesGenerator.generate();
+            generator.generate();
         } catch (ConfigurationException e) {
             getLog().error("Could not generate files", e);
         }

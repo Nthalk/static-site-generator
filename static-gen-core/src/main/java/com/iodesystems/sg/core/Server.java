@@ -1,11 +1,11 @@
 package com.iodesystems.sg.core;
 
-public class StaticFilesServer {
+public class Server {
 
     private final String outPath;
     private final int servePort;
 
-    public StaticFilesServer(String outPath, int servePort) {
+    public Server(String outPath, int servePort) {
         this.outPath = outPath;
         this.servePort = servePort;
     }

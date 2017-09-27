@@ -6,14 +6,14 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 
 import java.io.File;
 
-public class StaticFilesWatcher {
+public class Watcher {
     private final String sourcePath;
-    private final StaticFilesGenerator staticFilesGenerator;
+    private final Generator generator;
     private final Log log;
 
-    public StaticFilesWatcher(String sourcePath, StaticFilesGenerator staticFilesGenerator, Log log) {
+    public Watcher(String sourcePath, Generator generator, Log log) {
         this.sourcePath = sourcePath;
-        this.staticFilesGenerator = staticFilesGenerator;
+        this.generator = generator;
         this.log = log;
     }
 
@@ -23,19 +23,19 @@ public class StaticFilesWatcher {
             @Override
             public void onFileCreate(File file) {
                 log.info("File created: " + file.getPath());
-                generate(staticFilesGenerator);
+                generate(generator);
             }
 
             @Override
             public void onFileChange(File file) {
                 log.info("File changed: " + file.getPath());
-                generate(staticFilesGenerator);
+                generate(generator);
             }
 
             @Override
             public void onFileDelete(File file) {
                 log.info("File deleted: " + file.getPath());
-                generate(staticFilesGenerator);
+                generate(generator);
             }
         });
 
@@ -49,9 +49,9 @@ public class StaticFilesWatcher {
         }
     }
 
-    private void generate(StaticFilesGenerator staticFilesGenerator) {
+    private void generate(Generator generator) {
         try {
-            staticFilesGenerator.generate();
+            generator.generate();
         } catch (ConfigurationException e) {
             log.error("Error generating: " + sourcePath, e);
         }

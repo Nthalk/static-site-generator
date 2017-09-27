@@ -2,20 +2,20 @@
 {% block title %}{{title}}{% endblock %}
 {% block content %}
 <div class="header">
-    <h1 class="lead">Static Gen</h1>
-    <div class="subLead">The simple, generic, JVM templating system</div>
+    <h1 class="lead">{{title}}</h1>
+    <div class="subLead">{{tagLine}}</div>
     <div class="links">
-        <a href="">
-            <i class="fa fa-terminal"></i>
-            Usage
+        <a href="#manifest">
+            <i class="fa fa-book"></i>
+            Sample Configuration
         </a>
-        <a href="">
+        <a href="#cli">
+            <i class="fa fa-terminal"></i>
+            Command line
+        </a>
+        <a href="#maven">
             <i class="fa fa-code"></i>
             Maven
-        </a>
-        <a href="">
-            <i class="fa fa-book"></i>
-            Documentation
         </a>
         <a href="http://github.com/Nthalk/static-site-generator">
             <i class="fa fa-github"></i>
@@ -23,22 +23,9 @@
         </a>
     </div>
 </div>
-<pre class="codeBar"><code class="yaml">$ cat files.yaml
-copy:                               # <-- Copy these
-    - css/style.css                 #     files
-    - js                            # <-- or directories
-    - vendor
-model:
-    license: MIT
-files:                              # <-- Generate these files
-    /:                              # <-- Files that end in / are mapped to index.html
-        view: home.html             # <-- The pebble template file to render
-        model:                      # <-- Add variables to the rendering
-            title: Static Gen       # <-- This will be available as {{'{{ title }}'}}
 
-    /articles/{{'{{file}}'}}.html:  # <-- File names can be templatized
-        view: article.html
-        fileModels: "data/articles" # <-- The file will be generated for all items within this file
+<pre class="codeBar" id="manifest"><code class="yaml">$ cat files.yaml
+{% include 'manifest.yml' %}
 </code></pre>
 
 <div class="container">
@@ -47,12 +34,12 @@ files:                              # <-- Generate these files
         <li>CLI application</li>
         <li>Maven plugin</li>
         <li>Reading models from markdown files</li>
-        <li>Extracting YAML model data within markdown file headers</li>
+        <li>Extracting YAML underlying data within markdown file headers</li>
         <li>Reading models from JSON files</li>
         <li>Reading models from YAML files</li>
     </ul>
 
-    <h2>Command Line</h2>
+    <h2 id="cli">Command Line</h2>
     <p>Static Gen can be used from the command line after installing it.</p>
     <pre><code>$ ./sg --help
 Static Gen.
@@ -74,8 +61,9 @@ Options:
 
 </code></pre>
 
-    <h2>Maven Plugin</h2>
-    <p>Static Gen also ships as a maven plugin, however, it does not require a maven project, and can be simpler to run via a maven command without needing to setup the CLI</p>
+    <h2 id="maven">Maven Plugin</h2>
+    <p>Static Gen also ships as a maven plugin, however, it does not require a maven project, and can be simpler to run
+        via a maven command without needing to setup the CLI</p>
     <pre><code>{{'<build>
     ...
     <plugins>
@@ -108,9 +96,9 @@ Options:
                 <!-- -Dsg.out=dist-->
                 <!-- Default: ${project.build.outputDirectory} -->
                 <out>${project.build.outputDirectory}</out>
-                <!-- -Dsg.manifest=files.yml -->
-                <!-- Default: files.yml -->
-                <manifest>files.yml</manifest>
+                <!-- -Dsg.manifest=manifest.yml -->
+                <!-- Default: manifest.yml -->
+                <manifest>manifest.yml</manifest>
             </configuration>
         </plugin>
         ...
